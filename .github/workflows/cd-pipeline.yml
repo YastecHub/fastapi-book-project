@@ -33,7 +33,7 @@ jobs:
 
             cd ~/fastapi-book-project
             git pull origin main
-            if[ ! -d "venv" ]; then
+            if [ ! -d "venv" ]; then
               python3 -m venv venv
             fi
 
