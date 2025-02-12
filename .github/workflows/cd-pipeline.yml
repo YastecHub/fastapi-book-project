@@ -2,8 +2,7 @@ name: CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
@@ -16,12 +15,23 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.AWS_PUBLIC_IP }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
+            if [ ! -d ~/fastapi-book-project ]; then
+              git clone https://github.com/YastecHub/fastapi-book-project.git
+            fi 
+
             cd ~/fastapi-book-project
             git pull origin main
+            if[ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
             source venv/bin/activate
             pip install -r requirements.txt
-            systemctl restart fastapi-app
+            #systemctl restart fastapi-app
+
+            source venv/bin/activate
+            nohup uvicorn main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 &
