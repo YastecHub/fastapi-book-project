@@ -31,8 +31,8 @@ fastapi-book-project/
 ├── tests/
 │   ├── __init__.py
 │   └── test_books.py       # API endpoint tests
-├── main.py                 # Application entry point
-├── requirements.txt        # Project dependencies
+├── main.py                 # Application entry Point
+├── requirements.txt        # Project dependenciess
 └── README.md
 ```
 
