@@ -30,8 +30,7 @@ jobs:
         with:
           host: ${{ secrets.AWS_PUBLIC_IP }}
           username: ${{ secrets.AWS_USER }}
-          key: |
-            ${{ secrets.AWS_PRIVATE_KEY }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
             if [ ! -d ~/fastapi-book-project ]; then
               git clone https://github.com/YastecHub/fastapi-book-project.git
