@@ -17,15 +17,21 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key  # Check if the key is valid
           ls -la ~/.ssh/deploy_key
-          echo "Key file created and permissions set"
+          echo "SSH key added successfully"
 
+      - name: Debug SSH Connection
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_PUBLIC_IP }} "echo 'SSH connection successful'"
+      
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.AWS_PUBLIC_IP }}
           username: ${{ secrets.AWS_USER }}
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          key: |
+            ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
             if [ ! -d ~/fastapi-book-project ]; then
               git clone https://github.com/YastecHub/fastapi-book-project.git
@@ -39,4 +45,4 @@ jobs:
 
             source venv/bin/activate
             pip install -r requirements.txt
-            systemctl restart fastapi
+            sudo systemctl restart fastapi
