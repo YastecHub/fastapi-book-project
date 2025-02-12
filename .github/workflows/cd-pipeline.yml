@@ -31,7 +31,4 @@ jobs:
 
             source venv/bin/activate
             pip install -r requirements.txt
-            #systemctl restart fastapi-app
-
-            source venv/bin/activate
-            nohup uvicorn main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 &
+            systemctl restart fastapi
