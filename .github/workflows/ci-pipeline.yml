@@ -26,3 +26,7 @@ jobs:
       - name: Run Tests
         run: |
           pytest
+
+      - name: Fail on Test Errors
+        if: failure()
+        run: exit 1
